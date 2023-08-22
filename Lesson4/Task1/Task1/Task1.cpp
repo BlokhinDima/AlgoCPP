@@ -42,5 +42,6 @@ int main()
     }
 
     print_dynamic_array(arr, logical_size, actual_size);
+    delete[] arr;
     return 0;
 }
