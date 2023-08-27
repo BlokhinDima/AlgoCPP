@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-void print_array(int* arr, int size)
+void print_array(int* arr, const int size)
 {
     std::cout << "Array: ";
     for (int i = 0; i < size; ++i)
@@ -11,7 +11,7 @@ void print_array(int* arr, int size)
     std::cout << std::endl;
 }
 
-void print_node_info(int* arr, int node_index, int parent_index)
+void print_node_info(int* arr, const int node_index, const int parent_index)
 {
     std::string node_position{};
     int node_value = arr[node_index];
@@ -24,18 +24,23 @@ void print_node_info(int* arr, int node_index, int parent_index)
     {
         std::cout << " root ";
     }
-    else if (node_index % 2 == 0)
+    else 
     {
-        std::cout << " right(" << parent_value << ") ";
+        if (node_index % 2 == 0)
+        {
+            std::cout << " right(";
+        }
+        else
+        {
+            std::cout << " left(";
+        }
+        std::cout << parent_value << ") ";
     }
-    else
-    {
-        std::cout << " left(" << parent_value << ") ";
-    }
+
     std::cout << node_value << std::endl;
 }
 
-void print_pyramid(int* arr, int size)
+void print_pyramid(int* arr, const int size)
 {
     std::cout << "Pyramid: " << std::endl;
     int root_index = 0;
@@ -59,13 +64,13 @@ void print_pyramid(int* arr, int size)
 
 int main()
 {
-    int size1 = 6;
+    const int size1 = 6;
     int pyramid_on_array1[] = { 1, 3, 6, 5, 9, 8, };
 
-    int size2 = 8;
+    const int size2 = 8;
     int pyramid_on_array2[] = { 94, 67, 18, 44, 55, 12, 6, 42, };
 
-    int size3 = 10;
+    const int size3 = 10;
     int pyramid_on_array3[] = { 16, 11, 9, 10, 5, 6, 8, 1, 2, 4, };
 
     print_array(pyramid_on_array1, size1);
