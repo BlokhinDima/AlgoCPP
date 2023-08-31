@@ -3,7 +3,7 @@
 
 int** createTwoDimArray(int n, int m)
 {
-    int** array = new int*[n];
+    int** array = new int* [n];
     for (int i = 0; i < n; ++i)
     {
         array[i] = new int[m];
@@ -46,46 +46,59 @@ void printTwoDimArray(int** array, int n, int m)
     std::cout << std::endl;
 }
 
-void runDFS(int** adjacency_matrix, int verticies_number)
+void runBFS(int** adjacency_matrix, int verticies_number, int start_vertice)
 {
     bool* visited = new bool[verticies_number] {false};
+    int* queue = new int[verticies_number] {};
+    int queue_head = -1;
+    int queue_end = -1;
+
+    queue_head++;
+    queue[queue_head] = start_vertice;
+    queue_end = queue_head;
 
     std::cout << "Verticies order: ";
 
-    for (int i = 0; i < verticies_number; ++i)
+    while (queue_head < verticies_number)
     {
-        if (!visited[i])
+        int vertice_index = queue[queue_head];
+        if (!visited[vertice_index - 1])
         {
-            visited[i] = true;
-            std::cout << i + 1 << " ";
+            visited[vertice_index - 1] = true;
+            std::cout << vertice_index << " ";
         }
 
-        for (int j = 0; j < verticies_number; ++j)
+        for (int i = 0; i < verticies_number; ++i)
         {
-            if (adjacency_matrix[i][j] != 0 && !visited[j])
+            if (!visited[i] && adjacency_matrix[vertice_index - 1][i] != 0)
             {
-               std::cout << j + 1 << " ";
-               visited[j] = true;
-               i = j;
-               j = 0;
+                visited[i] = true;
+                std::cout << i + 1 << " ";
+                queue_end++;
+                queue[queue_end] = i + 1;
             }
         }
-
+        queue_head++;
     }
     std::cout << std::endl;
 
+    delete[] queue;
     delete[] visited;
 }
 
 int main()
 {
-    std::ifstream in_file { "input3.txt" };
+    std::ifstream in_file{ "input.txt" };
     int verticies_number;
     in_file >> verticies_number;
     int** adjacency_matrix = getAdjacencyMatrixFromFile(in_file, verticies_number);
     std::cout << "Adjacency matrix:\n";
     printTwoDimArray(adjacency_matrix, verticies_number, verticies_number);
-    runDFS(adjacency_matrix, verticies_number);
+
+    std::cout << "Enter start vertice: ";
+    int start_vertice;
+    std::cin >> start_vertice;
+    runBFS(adjacency_matrix, verticies_number, start_vertice);
     deleteTwoDimArray(adjacency_matrix, verticies_number, verticies_number);
     return 0;
 }
