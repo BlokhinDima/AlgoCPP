@@ -51,35 +51,35 @@ void runDFS(int** adjacency_matrix, int verticies_number)
     bool* visited = new bool[verticies_number] {false};
     int* stack = new int[verticies_number] {};
     int stack_top = -1;
-   
+    
     std::cout << "Verticies order: ";
 
-    for (int i = 0; i < verticies_number; ++i)
+    for (int vertice = 0; vertice < verticies_number; ++vertice)
     {
-        if (!visited[i])
+        if (!visited[vertice])
         {
-            visited[i] = true;
             stack_top++;
-            stack[stack_top] = i;
-            std::cout << stack[stack_top] + 1 << " ";
+            stack[stack_top] = vertice;
 
             while (stack_top != -1)
             {
-                for (int j = 0; j < verticies_number; ++j)
+                vertice = stack[stack_top];
+                stack_top--;
+
+                if (!visited[vertice])
                 {
-                    if (adjacency_matrix[i][j] != 0 && !visited[j])
-                    {
-                        visited[j] = true;
-                        stack_top++;
-                        stack[stack_top] = j;
-                        std::cout << stack[stack_top] + 1 << " ";
-                        i = j;
-                        j = -1;
-                    }
+                    visited[vertice] = true;
+                    std::cout << vertice + 1 << " ";
                 }
 
-                i = stack[stack_top];
-                stack_top--;
+                for (int j = verticies_number - 1; j >= 0; --j)
+                {
+                    if (adjacency_matrix[vertice][j] != 0 && !visited[j])
+                    {
+                        stack_top++;
+                        stack[stack_top] = j;
+                    }
+                }
             }
         }
     }
@@ -91,7 +91,7 @@ void runDFS(int** adjacency_matrix, int verticies_number)
 
 int main()
 {
-    std::ifstream in_file { "input5.txt" };
+    std::ifstream in_file { "input3.txt" };
     int verticies_number;
     in_file >> verticies_number;
     int** adjacency_matrix = getAdjacencyMatrixFromFile(in_file, verticies_number);
