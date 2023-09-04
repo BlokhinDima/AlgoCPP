@@ -52,43 +52,40 @@ bool hasCycle(int** adjacency_matrix, int verticies_number)
     int* stack = new int[verticies_number] {};
     int stack_top = -1;
 
-    for (int i = 0; i < verticies_number; ++i)
+    for (int vertice = 0; vertice < verticies_number; ++vertice)
     {
-        if (!visited[i])
+        if (!visited[vertice])
         {
-            visited[i] = true;
             stack_top++;
-            stack[stack_top] = i;
+            stack[stack_top] = vertice;
+            int prev = vertice;
 
             while (stack_top != -1)
             {
-                int prev = stack[stack_top];
+                vertice = stack[stack_top];
+                stack_top--;
 
-                for (int j = 0; j < verticies_number; ++j)
+                if (!visited[vertice])
                 {
-                    if (adjacency_matrix[i][j] != 0)
-                    {
-                        if (!visited[j])
-                        {
-                            visited[j] = true;
-                            stack_top++;
-                            stack[stack_top] = j;
-                            prev = i;
-                            i = j;
-                            j = -1;
-                        }
-                        else
-                        {
-                            if (prev != j) return true;
-                        }
-                    }
+                    visited[vertice] = true;
+                }
+                else
+                {
+                    if (prev != vertice) return true;
                 }
 
-                i = stack[stack_top];
-                stack_top--;
+                for (int j = verticies_number - 1; j >= 0; --j)
+                {
+                    if (adjacency_matrix[vertice][j] != 0 && !visited[j])
+                    {
+                        stack_top++;
+                        stack[stack_top] = j;
+                    }
+                }
             }
         }
     }
+    std::cout << std::endl;
 
     delete[] visited;
     delete[] stack;
@@ -97,7 +94,7 @@ bool hasCycle(int** adjacency_matrix, int verticies_number)
 
 int main()
 {
-    std::ifstream in_file{ "input2.txt" };
+    std::ifstream in_file{ "input6.txt" };
     int verticies_number;
     in_file >> verticies_number;
     int** adjacency_matrix = getAdjacencyMatrixFromFile(in_file, verticies_number);
