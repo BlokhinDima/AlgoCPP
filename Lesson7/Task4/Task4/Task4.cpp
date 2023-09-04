@@ -53,32 +53,34 @@ void printCohesionComponents(int** adjacency_matrix, int verticies_number)
     int* stack = new int[verticies_number] {};
     int stack_top = -1;
 
-    for (int i = 0; i < verticies_number; ++i)
+    for (int vertice = 0; vertice < verticies_number; ++vertice)
     {
-        if (components_id[i] == 0)
+        if (components_id[vertice] == 0)
         {
-            component_id++;
-            components_id[i] = component_id;
             stack_top++;
-            stack[stack_top] = i;
-        }
+            stack[stack_top] = vertice;
+            component_id++;
+            components_id[vertice] = component_id;
 
-        while (stack_top != -1)
-        {
-            for (int j = 0; j < verticies_number; ++j)
+            while (stack_top != -1)
             {
-                if (adjacency_matrix[i][j] != 0 && components_id[j] == 0)
+                vertice = stack[stack_top];
+                stack_top--;
+
+                if (components_id[vertice] == 0)
                 {
-                    components_id[j] = component_id;
-                    stack_top++;
-                    stack[stack_top] = j;
-                    i = j;
-                    j = -1;
+                    components_id[vertice] = component_id;
+                }
+
+                for (int j = verticies_number - 1; j >= 0; --j)
+                {
+                    if (adjacency_matrix[vertice][j] != 0 && components_id[j] == 0)
+                    {
+                        stack_top++;
+                        stack[stack_top] = j;
+                    }
                 }
             }
-
-            i = stack[stack_top];
-            stack_top--;
         }
     }
 
@@ -95,7 +97,7 @@ void printCohesionComponents(int** adjacency_matrix, int verticies_number)
 
 int main()
 {
-    std::ifstream in_file{ "input2.txt" };
+    std::ifstream in_file{ "input4.txt" };
     int verticies_number;
     in_file >> verticies_number;
     int** adjacency_matrix = getAdjacencyMatrixFromFile(in_file, verticies_number);
